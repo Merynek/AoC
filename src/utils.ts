@@ -11,7 +11,8 @@ export function getInputNumbers(): number[] {
 export function getInputStrings(): string[] {
     return input.toString()
         .trim()
-        .split('\n');
+        .split('\n')
+        .map(str => str.replace(/(\r)/gm, ""))
 }
 
 
