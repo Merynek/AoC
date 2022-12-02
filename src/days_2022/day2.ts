@@ -1,14 +1,5 @@
-import {getInputMatrix, getInputNumbers, getInputStrings} from "../utils";
-import maxBy from "lodash/maxBy";
-import sum from "lodash/sum";
+import {getInputStrings} from "../utils";
 import sumBy from "lodash/sumBy";
-import orderBy from "lodash/orderBy";
-
-enum OPPONENT_OPTION {
-    ROCK = "A",
-    PAPER = "B",
-    SCISSORS = "C"
-}
 
 enum OPTIONS {
     ROCK = "ROCK",
@@ -16,13 +7,7 @@ enum OPTIONS {
     SCISSORS = "SCISSORS"
 }
 
-enum MY_OPTION {
-    ROCK = "X",
-    PAPER = "Y",
-    SCISSORS = "Z"
-}
-
-enum NEED_OPTION {
+enum NEED_MOVE {
     LOSE = "X",
     DRAW = "Y",
     WIN = "Z"
@@ -37,13 +22,13 @@ enum Result {
 class Round {
     public opponentOption: OPTIONS;
     public myOption: OPTIONS;
-    public needOption: NEED_OPTION|null;
+    public needOption: NEED_MOVE|null;
 
-    constructor(opponent: OPTIONS, me: OPTIONS, needOption: NEED_OPTION|null) {
+    constructor(opponent: OPTIONS, me: OPTIONS, needMove: NEED_MOVE|null) {
         this.opponentOption = opponent;
         this.myOption = me;
-        this.needOption = needOption;
-        if (needOption) {
+        this.needOption = needMove;
+        if (needMove) {
             this.recompute();
         }
     }
@@ -56,42 +41,6 @@ class Round {
                 return 2;
             case OPTIONS.SCISSORS:
                 return 3;
-        }
-    }
-
-    private recompute() {
-        if (this.needOption) {
-            switch (this.needOption) {
-                case NEED_OPTION.DRAW:
-                    this.myOption = this.opponentOption;
-                    break;
-                case NEED_OPTION.LOSE:
-                    switch (this.opponentOption) {
-                        case OPTIONS.PAPER:
-                            this.myOption = OPTIONS.ROCK;
-                            break;
-                        case OPTIONS.ROCK:
-                            this.myOption = OPTIONS.SCISSORS;
-                            break;
-                        case OPTIONS.SCISSORS:
-                            this.myOption = OPTIONS.PAPER;
-                            break;
-                    }
-                    break;
-                case NEED_OPTION.WIN:
-                    switch (this.opponentOption) {
-                        case OPTIONS.PAPER:
-                            this.myOption = OPTIONS.SCISSORS;
-                            break;
-                        case OPTIONS.ROCK:
-                            this.myOption = OPTIONS.PAPER;
-                            break;
-                        case OPTIONS.SCISSORS:
-                            this.myOption = OPTIONS.ROCK;
-                            break;
-                    }
-                    break;
-            }
         }
     }
 
@@ -143,27 +92,63 @@ class Round {
                 }
         }
     }
-}
 
-const convertOpponentToOption = (option: OPPONENT_OPTION): OPTIONS => {
-    switch (option) {
-        case OPPONENT_OPTION.SCISSORS:
-            return OPTIONS.SCISSORS;
-        case OPPONENT_OPTION.ROCK:
-            return OPTIONS.ROCK;
-        case OPPONENT_OPTION.PAPER:
-            return OPTIONS.PAPER;
+    private recompute() {
+        if (this.needOption) {
+            switch (this.needOption) {
+                case NEED_MOVE.DRAW:
+                    this.myOption = this.opponentOption;
+                    break;
+                case NEED_MOVE.LOSE:
+                    switch (this.opponentOption) {
+                        case OPTIONS.PAPER:
+                            this.myOption = OPTIONS.ROCK;
+                            break;
+                        case OPTIONS.ROCK:
+                            this.myOption = OPTIONS.SCISSORS;
+                            break;
+                        case OPTIONS.SCISSORS:
+                            this.myOption = OPTIONS.PAPER;
+                            break;
+                    }
+                    break;
+                case NEED_MOVE.WIN:
+                    switch (this.opponentOption) {
+                        case OPTIONS.PAPER:
+                            this.myOption = OPTIONS.SCISSORS;
+                            break;
+                        case OPTIONS.ROCK:
+                            this.myOption = OPTIONS.PAPER;
+                            break;
+                        case OPTIONS.SCISSORS:
+                            this.myOption = OPTIONS.ROCK;
+                            break;
+                    }
+                    break;
+            }
+        }
     }
 }
 
-const convertMeToOption = (option: MY_OPTION): OPTIONS => {
+const convertOpponentToOption = (option: string): OPTIONS => {
     switch (option) {
-        case MY_OPTION.SCISSORS:
-            return OPTIONS.SCISSORS;
-        case MY_OPTION.ROCK:
+        case "A":
             return OPTIONS.ROCK;
-        case MY_OPTION.PAPER:
+        case "B":
             return OPTIONS.PAPER;
+        case "C":
+            return OPTIONS.SCISSORS;
+    }
+}
+
+const convertMeToOption = (option: string): OPTIONS => {
+    switch (option) {
+        case "X":
+            return OPTIONS.ROCK;
+        case "Y":
+            return OPTIONS.PAPER;
+        case "Z":
+            return OPTIONS.SCISSORS;
     }
 }
 
@@ -172,8 +157,8 @@ export function getResult1() {
     const rounds: Round[] = [];
     inputs.forEach(input => {
         const double = input.replace(" ", "");
-        const opponent = convertOpponentToOption(double[0] as OPPONENT_OPTION);
-        const me = convertMeToOption(double[1] as MY_OPTION);
+        const opponent = convertOpponentToOption(double[0]);
+        const me = convertMeToOption(double[1]);
         rounds.push(new Round(opponent, me, null))
     })
 
@@ -187,9 +172,9 @@ export function getResult2() {
     const rounds: Round[] = [];
     inputs.forEach(input => {
         const double = input.replace(" ", "");
-        const opponent = convertOpponentToOption(double[0] as OPPONENT_OPTION);
-        const me = convertMeToOption(double[1] as MY_OPTION);
-        const needOption = double[1] as NEED_OPTION;
+        const opponent = convertOpponentToOption(double[0]);
+        const me = convertMeToOption(double[1]);
+        const needOption = double[1] as NEED_MOVE;
         rounds.push(new Round(opponent, me, needOption))
     })
 

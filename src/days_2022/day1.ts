@@ -1,4 +1,4 @@
-import {getInputMatrix, getInputNumbers, getInputStrings} from "../utils";
+import {getInputNumbers} from "../utils";
 import maxBy from "lodash/maxBy";
 import sum from "lodash/sum";
 import sumBy from "lodash/sumBy";
