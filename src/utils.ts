@@ -1,5 +1,5 @@
-import input from "bundle-text:./input.txt";
-import inputAdditional from "bundle-text:./inputAdditional.txt";
+import input from "bundle-text:./inputs/input.txt";
+import inputAdditional from "bundle-text:./inputs/inputAdditional.txt";
 
 export function getInputNumbers(): number[] {
     return input.toString()
