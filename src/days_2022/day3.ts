@@ -95,10 +95,8 @@ const getPriority = (item: string) => {
 
 export function getResult1() {
     const inputs = getInputStrings();
-    const ruckSacks: Rucksack[] = [];
-    inputs.forEach(input => {
-        ruckSacks.push(new Rucksack(input));
-    })
+    const ruckSacks: Rucksack[] = inputs.map(input => new Rucksack(input));
+
     return sumBy(ruckSacks, (rucksack: Rucksack) => {
         return rucksack.sumPriorities;
     })
@@ -106,10 +104,7 @@ export function getResult1() {
 
 export function getResult2() {
     const inputs = getInputStrings();
-    const ruckSacks: Rucksack[] = [];
-    inputs.forEach(input => {
-        ruckSacks.push(new Rucksack(input));
-    })
+    const ruckSacks: Rucksack[] = inputs.map(input => new Rucksack(input));
     const groups: ElvesGroup[] = chunk(ruckSacks, 3).map(group => new ElvesGroup(group));
 
     return sumBy(groups, (group: ElvesGroup) => {
