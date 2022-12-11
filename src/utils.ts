@@ -40,13 +40,13 @@ export function sum(numbers: any) {
     return numbers.reduce((partial_sum, a) => partial_sum + a, 0);
 }
 
-export function getMatrixString(): string[][] {
+export function getMatrixString(): number[][] {
     const matrix = [];
     const inputString = getInputStrings();
     inputString.forEach(input => {
         const numbers = [];
         for (let i = 0; i < input.length; i++) {
-            numbers.push(input[i]);
+            numbers.push(Number(input[i]));
         }
         matrix.push(numbers);
     })
